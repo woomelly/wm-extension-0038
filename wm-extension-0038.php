@@ -52,15 +52,24 @@ if ( ! function_exists( 'handle_bulk_actions_edit_product_ext_038' ) ) {
                                             if ( $wm_qanda_exit == false ) {
                                                 $wm_qanda = new WMQandA();
                                                 $wm_qanda->set_question_id( $value->id );
-                                                $wm_qanda->set_answer( $value->answer );
-                                                $wm_qanda->set_date_created( $value->date_created );
-                                                $wm_qanda->set_deleted_from_listing( $value->deleted_from_listing );
-                                                $wm_qanda->set_hold( $value->hold );
-                                                $wm_qanda->set_item_id( $value->item_id );
-                                                $wm_qanda->set_seller_id( $value->seller_id );
-                                                $wm_qanda->set_status( $value->status );
-                                                $wm_qanda->set_text( $value->text );
-                                                $wm_qanda->set_from_user( $value->from );
+                                                if ( isset($value->answer) )
+                                                    $wm_qanda->set_answer( $value->answer );
+                                                if ( isset($value->date_created) )
+                                                    $wm_qanda->set_date_created( $value->date_created );
+                                                if ( isset($value->deleted_from_listing) )
+                                                    $wm_qanda->set_deleted_from_listing( $value->deleted_from_listing );
+                                                if ( isset($value->hold) )
+                                                    $wm_qanda->set_hold( $value->hold );
+                                                if ( isset($value->item_id) )
+                                                    $wm_qanda->set_item_id( $value->item_id );
+                                                if ( isset($value->seller_id) )
+                                                    $wm_qanda->set_seller_id( $value->seller_id );
+                                                if ( isset($value->status) )
+                                                    $wm_qanda->set_status( $value->status );
+                                                if ( isset($value->text) )
+                                                    $wm_qanda->set_text( $value->text );
+                                                if ( isset($value->from) )
+                                                    $wm_qanda->set_from_user( $value->from );
                                                 $wm_qanda->set_product_id( $post_id );
                                                 $data_user = WMeli::get_users( $value->from->id );
                                                 if ( !empty($data_user) ) {
@@ -71,12 +80,18 @@ if ( ! function_exists( 'handle_bulk_actions_edit_product_ext_038' ) ) {
                                                 unset( $wm_qanda );
                                                 unset( $data_user );
                                             } else {
-                                                $wm_qanda_exit->set_answer( $value->answer );
-                                                $wm_qanda_exit->set_deleted_from_listing( $value->deleted_from_listing );
-                                                $wm_qanda_exit->set_hold( $value->hold );
-                                                $wm_qanda_exit->set_status( $value->status );
-                                                $wm_qanda_exit->set_text( $value->text );
-                                                $wm_qanda_exit->set_from_user( $value->from );
+                                                if ( isset($value->answer) )
+                                                    $wm_qanda_exit->set_answer( $value->answer );
+                                                if ( isset($value->deleted_from_listing) )
+                                                    $wm_qanda_exit->set_deleted_from_listing( $value->deleted_from_listing );
+                                                if ( isset($value->hold) )
+                                                    $wm_qanda_exit->set_hold( $value->hold );
+                                                if ( isset($value->status) )
+                                                    $wm_qanda_exit->set_status( $value->status );
+                                                if ( isset($value->text) )
+                                                    $wm_qanda_exit->set_text( $value->text );
+                                                if ( isset($value->from) )
+                                                    $wm_qanda_exit->set_from_user( $value->from );
                                                 $wm_qanda_exit->set_connect_ml( true );
                                                 $save_qanda = $wm_qanda_exit->update();
                                             }
@@ -88,7 +103,7 @@ if ( ! function_exists( 'handle_bulk_actions_edit_product_ext_038' ) ) {
                                 unset($data_resource);
                             }
                         }               
-                        wc_setcookie( 'wmid_import_qandas', count( $post_ids ) );
+                        wc_setcookie( 'woomelly_import_qandas', count( $post_ids ) );
                     break;
                     default:
                     break;
