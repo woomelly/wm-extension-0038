@@ -30,6 +30,7 @@ if ( ! function_exists( 'handle_bulk_actions_edit_product_ext_038' ) ) {
             if ( !empty($post_ids) ) {
                 switch ( $doaction ) {
                     case 'woomelly_import_qandas':
+                        $woomelly_get_settings = new WMSettings();
                         foreach ( $post_ids as $post_id ) {
                             $code = get_post_meta( $post_id, '_wm_code_meli', true );
                             if ( $code != "" ) {
@@ -39,65 +40,69 @@ if ( ! function_exists( 'handle_bulk_actions_edit_product_ext_038' ) ) {
                                     $woomellly_items_searched_key = array();
                                     $woomellly_items_searched_data = array();
                                     foreach ( $data_resource->questions as $value ) {
-                                        $wmproduct = null;
-                                        if ( !in_array($value->item_id, $woomellly_items_searched_key) ) {
-                                            $wmproduct = wm_get_product_by_code( $value->item_id );
-                                            $woomellly_items_searched_key[] = $value->item_id;
-                                            $woomellly_items_searched_data[$value->item_id] = $wmproduct;
-                                        } else {
-                                            $wmproduct = $woomellly_items_searched_data[$value->item_id];
-                                        }
-                                        if ( $wmproduct != null ) {
-                                            $wm_qanda_exit = wm_get_qand_by_question_id( $value->id );
-                                            if ( $wm_qanda_exit == false ) {
-                                                $wm_qanda = new WMQandA();
-                                                $wm_qanda->set_question_id( $value->id );
-                                                if ( isset($value->answer) )
-                                                    $wm_qanda->set_answer( $value->answer );
-                                                if ( isset($value->date_created) )
-                                                    $wm_qanda->set_date_created( $value->date_created );
-                                                if ( isset($value->deleted_from_listing) )
-                                                    $wm_qanda->set_deleted_from_listing( $value->deleted_from_listing );
-                                                if ( isset($value->hold) )
-                                                    $wm_qanda->set_hold( $value->hold );
-                                                if ( isset($value->item_id) )
-                                                    $wm_qanda->set_item_id( $value->item_id );
-                                                if ( isset($value->seller_id) )
-                                                    $wm_qanda->set_seller_id( $value->seller_id );
-                                                if ( isset($value->status) )
-                                                    $wm_qanda->set_status( $value->status );
-                                                if ( isset($value->text) )
-                                                    $wm_qanda->set_text( $value->text );
-                                                if ( isset($value->from) )
-                                                    $wm_qanda->set_from_user( $value->from );
-                                                $wm_qanda->set_product_id( $post_id );
-                                                $data_user = WMeli::get_users( $value->from->id );
-                                                if ( !empty($data_user) ) {
-                                                    $wm_qanda->set_from_extra( $data_user );
-                                                }
-                                                $wm_qanda->set_connect_ml( true );
-                                                $save_qanda = $wm_qanda->save();
-                                                unset( $wm_qanda );
-                                                unset( $data_user );
+                                        if ( $value->seller_id == $woomelly_get_settings->get_user_id() ) {
+                                            $wmproduct = null;
+                                            if ( !in_array($value->item_id, $woomellly_items_searched_key) ) {
+                                                $wmproduct = wm_get_product_by_code( $value->item_id );
+                                                $woomellly_items_searched_key[] = $value->item_id;
+                                                $woomellly_items_searched_data[$value->item_id] = $wmproduct;
                                             } else {
-                                                if ( isset($value->answer) )
-                                                    $wm_qanda_exit->set_answer( $value->answer );
-                                                if ( isset($value->deleted_from_listing) )
-                                                    $wm_qanda_exit->set_deleted_from_listing( $value->deleted_from_listing );
-                                                if ( isset($value->hold) )
-                                                    $wm_qanda_exit->set_hold( $value->hold );
-                                                if ( isset($value->status) )
-                                                    $wm_qanda_exit->set_status( $value->status );
-                                                if ( isset($value->text) )
-                                                    $wm_qanda_exit->set_text( $value->text );
-                                                if ( isset($value->from) )
-                                                    $wm_qanda_exit->set_from_user( $value->from );
-                                                $wm_qanda_exit->set_connect_ml( true );
-                                                $save_qanda = $wm_qanda_exit->update();
+                                                $wmproduct = $woomellly_items_searched_data[$value->item_id];
                                             }
-                                            unset($wm_qanda_exit);
+                                            if ( $wmproduct != null ) {
+                                                $wm_qanda_exit = wm_get_qand_by_question_id( $value->id );
+                                                if ( $wm_qanda_exit == false ) {
+                                                    $wm_qanda = new WMQandA();
+                                                    $wm_qanda->set_question_id( $value->id );
+                                                    if ( isset($value->answer) )
+                                                        $wm_qanda->set_answer( $value->answer );
+                                                    if ( isset($value->date_created) )
+                                                        $wm_qanda->set_date_created( $value->date_created );
+                                                    if ( isset($value->deleted_from_listing) )
+                                                        $wm_qanda->set_deleted_from_listing( $value->deleted_from_listing );
+                                                    if ( isset($value->hold) )
+                                                        $wm_qanda->set_hold( $value->hold );
+                                                    if ( isset($value->item_id) )
+                                                        $wm_qanda->set_item_id( $value->item_id );
+                                                    if ( isset($value->seller_id) )
+                                                        $wm_qanda->set_seller_id( $value->seller_id );
+                                                    if ( isset($value->status) )
+                                                        $wm_qanda->set_status( $value->status );
+                                                    if ( isset($value->text) )
+                                                        $wm_qanda->set_text( $value->text );
+                                                    if ( isset($value->from) )
+                                                        $wm_qanda->set_from_user( $value->from );
+                                                    $wm_qanda->set_product_id( $post_id );
+                                                    if ( isset($value->from) && isset($value->from->id) ) {
+                                                        $data_user = WMeli::get_users( $value->from->id );
+                                                        if ( !empty($data_user) ) {
+                                                            $wm_qanda->set_from_extra( $data_user );
+                                                        }
+                                                    }
+                                                    $wm_qanda->set_connect_ml( true );
+                                                    $save_qanda = $wm_qanda->save();
+                                                    unset( $wm_qanda );
+                                                    unset( $data_user );
+                                                } else {
+                                                    if ( isset($value->answer) )
+                                                        $wm_qanda_exit->set_answer( $value->answer );
+                                                    if ( isset($value->deleted_from_listing) )
+                                                        $wm_qanda_exit->set_deleted_from_listing( $value->deleted_from_listing );
+                                                    if ( isset($value->hold) )
+                                                        $wm_qanda_exit->set_hold( $value->hold );
+                                                    if ( isset($value->status) )
+                                                        $wm_qanda_exit->set_status( $value->status );
+                                                    if ( isset($value->text) )
+                                                        $wm_qanda_exit->set_text( $value->text );
+                                                    if ( isset($value->from) )
+                                                        $wm_qanda_exit->set_from_user( $value->from );
+                                                    $wm_qanda_exit->set_connect_ml( true );
+                                                    $save_qanda = $wm_qanda_exit->update();
+                                                }
+                                                unset($wm_qanda_exit);
+                                            }
+                                            unset( $wmproduct );
                                         }
-                                        unset( $wmproduct );
                                     }
                                 }
                                 unset($data_resource);
